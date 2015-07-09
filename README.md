@@ -52,7 +52,7 @@ ArticleUrl.show_url(article, schema: "https")
   #=> "https://kaeruspoon.net/articles/first_day"
 ```
 
-```schema``` DSL is specify default schema.
+```schema``` DSL specifies default schema.
 ```ruby
 class ArticleUrl < Kuebiko::Base
   schema :hoge
@@ -69,7 +69,7 @@ ArticleUrl.show_url(article, host: "hoge.com")
   #=> "http://hoge.com/articles/first_day"
 ```
 
-```host``` DSL is specify default host.
+```host``` DSL specifies default host.
 ```ruby
 class ArticleUrl < Kuebiko::Base
   host "fuga.com"
