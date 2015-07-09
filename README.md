@@ -4,6 +4,88 @@ Kuebiko generates URLs from ruby code.
 
 ![Kuebiko](https://github.com/tsukasaoishi/kuebiko/wiki/images/kuebiko.jpg)
 
+## Usage
+
+URLs generator class inherited Kuebiko::Base.
+```ruby
+class ArticleUrl < Kuebiko::Base
+  schema :http
+  host "kaeruspoon.net"
+
+  def show(article)
+    ["articles", article.title]
+  end
+end
+```
+
+generate URL.
+```ruby
+article.title #=> "first_day"
+
+ArticleUrl.show_path(article) #=> "/articles/first_day"
+ArticleUrl.show_url(article) #=> "http://kaeruspoon.net/articles/first_day"
+```
+Class methods of suffix ```_path``` generate url only path. Suffix ```_url``` generate full url.
+
+```show``` instance method is called from ```show_path``` class method (or ```show_url```).
+The instance method must return Array or String object.
+
+### query parameters
+
+generate URL with query parameters.
+```ruby
+ArticleUrl.show_path(article, query: {special_code: '123'})
+  #=> "/articles/first_day?special_code=123
+```
+
+### anchor
+generate URL with anchor.
+```ruby
+ArticleUrl.show_path(article, anchor: "navi")
+  #=> "/articles/first_day#navi"
+```
+
+### schema
+specify schema and generate URL.
+```ruby
+ArticleUrl.show_url(article, schema: "https")
+  #=> "https://kaeruspoon.net/articles/first_day"
+```
+
+```schema``` DSL is specify default schema.
+```ruby
+class ArticleUrl < Kuebiko::Base
+  schema :hoge
+  ...
+end
+
+ArticleUrl.show_url(article) #=> "hoge://kaeruspoon.net/articles/first_day"
+```
+
+### host
+specify host and generate URL.
+```ruby
+ArticleUrl.show_url(article, host: "hoge.com")
+  #=> "http://hoge.com/articles/first_day"
+```
+
+```host``` DSL is specify default host.
+```ruby
+class ArticleUrl < Kuebiko::Base
+  host "fuga.com"
+  ...
+end
+
+ArticleUrl.show_url(article) #=> "http://fuga.com/articles/first_day"
+```
+
+### port
+generate URL with port.
+```ruby
+ArticleUrl.show_url(article, port: 3000)
+  #=> "http://kaeruspoon.net:3000/articles/first_day"
+```
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -21,10 +103,6 @@ Or install it yourself as:
 ```
 $ gem install kuebiko
 ```
-
-## Usage
-
-TODO: Write usage instructions here
 
 ## Development
 
