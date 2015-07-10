@@ -1,5 +1,5 @@
 module Kuebiko
-  class Configuration
+  class Components
     class << self
       def default_components(*args)
         @components = new(*args)

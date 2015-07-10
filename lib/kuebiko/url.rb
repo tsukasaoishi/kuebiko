@@ -1,4 +1,4 @@
-require "kuebiko/configuration"
+require "kuebiko/components"
 
 module Kuebiko
   class Url
@@ -20,7 +20,7 @@ module Kuebiko
       end
 
       def components
-        @components ||= Configuration.new
+        @components ||= Components.new
       end
     end
   end
