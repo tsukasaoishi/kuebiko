@@ -1,53 +1,43 @@
+require "kuebiko/components/constants"
+require "kuebiko/components/getter_methods"
+require "kuebiko/components/setter_methods"
+
 module Kuebiko
   class Components
+    extend GetterMethods
+
     class << self
       def default_components(*args)
-        @components = new(*args)
-      end
-
-      def schema
-        components.schema
-      end
-
-      def host
-        components.host
-      end
-
-      def port
-        components.port
-      end
-
-      def trailing_slash
-        components.trailing_slash
-      end
-
-      private
-
-      def components
-        @components ||= new
+        comp = new
+        comp.setup(*args)
+        @components = comp
       end
     end
 
-    SCHEMA = :http
-    PORT = 80
-    private_constant :SCHEMA, :PORT
+    def setup(options = {})
+      bad_keys = options.keys - CONFIGS
+      raise ArgumentError unless bad_keys.empty?
 
-    attr_writer :schema, :port
-    attr_accessor :host, :trailing_slash
-
-    def initialize(schema: SCHEMA, host: nil, port: PORT, trailing_slash: false)
-      @schema = schema
-      @host = host
-      @port = port
-      @trailing_slash = trailing_slash
+      CONFIGS.each do |config|
+        instance_variable_set("@#{config}", options[config]) unless options[config].nil?
+      end
     end
 
-    def schema
-      @schema || SCHEMA
-    end
+    CONFIGS.each do |config|
+      class_eval <<-DEF_CONFIG, __FILE__, __LINE__ + 1
+        def #{config}?
+          instance_variable_defined?(:@#{config})
+        end
 
-    def port
-      @port || PORT
+        def #{config}
+          #{config}? ? @#{config} : DEFAULT[:#{config}]
+        end
+
+        def #{config}=(value)
+          @#{config} = value
+        end
+      DEF_CONFIG
     end
   end
 end
+
