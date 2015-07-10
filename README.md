@@ -1,6 +1,9 @@
 # Kuebiko
 Kuebiko generates URLs from ruby code.
 
+[![Build Status](https://travis-ci.org/tsukasaoishi/kuebiko.svg?branch=master)](https://travis-ci.org/tsukasaoishi/kuebiko.svg)
+[![Code Climate](https://codeclimate.com/github/tsukasaoishi/kuebiko/badges/gpa.svg)](https://codeclimate.com/github/tsukasaoishi/kuebiko)
+
 ![Kuebiko](https://github.com/tsukasaoishi/kuebiko/wiki/images/kuebiko.jpg)
 
 ## Usage
@@ -38,7 +41,7 @@ You can specify name of resource. The resource name will use as internal accesso
 ```ruby
 class ArticleUrl < Kuebiko::Base
   resource :article
-  
+
   def hoge
     build article.title # article is the internal accessor
   end
@@ -141,7 +144,7 @@ There is ```options``` internal accessor.
 ```ruby
 class ArticleUrl < Kuebiko::Base
   resource :article
-  
+
   def show
     queries = options.select {|k,v| %i|code mode|.include?(k.to_sym) }
     build "articles", article.title, query: queries
