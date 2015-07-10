@@ -1,7 +1,7 @@
 # Kuebiko
 Kuebiko generates URLs from ruby code.
 
-[![Build Status](https://travis-ci.org/tsukasaoishi/kuebiko.svg?branch=master)](https://travis-ci.org/tsukasaoishi/kuebiko.svg)
+[![Build Status](https://travis-ci.org/tsukasaoishi/kuebiko.svg?branch=master)](https://travis-ci.org/tsukasaoishi/kuebiko)
 [![Code Climate](https://codeclimate.com/github/tsukasaoishi/kuebiko/badges/gpa.svg)](https://codeclimate.com/github/tsukasaoishi/kuebiko)
 
 ![Kuebiko](https://github.com/tsukasaoishi/kuebiko/wiki/images/kuebiko.jpg)
