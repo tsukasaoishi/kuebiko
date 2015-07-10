@@ -1,6 +1,12 @@
 require 'test_helper'
 
 class DefaultComponentTest < Minitest::Test
+  def setup
+    Kuebiko::Configuration.class_eval do
+      @components = nil
+    end
+  end
+
   test "raise exception if unknown key is specified" do
     assert_raises(ArgumentError) {
       Kuebiko::Configuration.default_components(hoge: true)
@@ -45,9 +51,9 @@ class DefaultComponentTest < Minitest::Test
   end
 
   test "check default values" do
-    assert :http, Kuebiko::Configuration.schema
+    assert_equal :http, Kuebiko::Configuration.schema
     assert_nil Kuebiko::Configuration.host
-    assert 80, Kuebiko::Configuration.port
+    assert_equal 80, Kuebiko::Configuration.port
     refute Kuebiko::Configuration.trailing_slash
   end
 

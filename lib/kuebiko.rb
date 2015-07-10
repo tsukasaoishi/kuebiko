@@ -1,5 +1,6 @@
 require "kuebiko/version"
 require "kuebiko/configuration"
+require "kuebiko/url"
 
 module Kuebiko
   def self.default_components(*args)
