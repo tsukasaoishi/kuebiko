@@ -1,90 +1,159 @@
 # Kuebiko
-
 Kuebiko generates URLs from ruby code.
 
 ![Kuebiko](https://github.com/tsukasaoishi/kuebiko/wiki/images/kuebiko.jpg)
 
 ## Usage
-
-URLs generator class inherited Kuebiko::Base.
+URLs generator class inherits Kuebiko::Base.
 ```ruby
 class ArticleUrl < Kuebiko::Base
+  resource :article
   schema :http
   host "kaeruspoon.net"
 
-  def show(article)
-    ["articles", article.title]
+  def show
+    build "articles", article.title
   end
 end
 ```
 
-generate URL.
+You can generate path or URL.
 ```ruby
 article.title #=> "first_day"
 
 ArticleUrl.show_path(article) #=> "/articles/first_day"
 ArticleUrl.show_url(article) #=> "http://kaeruspoon.net/articles/first_day"
+
+url = ArticleUrl.new(article)
+url.show_path #=> "/articles/first_day"
+url.show_url #=> "http://kaeruspoon.net/articles/first_day"
 ```
-Class methods of suffix ```_path``` generate url only path. Suffix ```_url``` generate full url.
+Methods of suffix ```_path``` generate only path. 
+Methods of suffix ```_url``` generate URL.
 
-```show``` instance method is called from ```show_path``` class method (or ```show_url```).
-The instance method must return Array or String object.
+```show``` instance method is called from ```show_path``` method (or ```show_url```).
 
-### query parameters
-
-generate URL with query parameters.
-```ruby
-ArticleUrl.show_path(article, query: {special_code: '123'})
-  #=> "/articles/first_day?special_code=123
-```
-
-### anchor
-generate URL with anchor.
-```ruby
-ArticleUrl.show_path(article, anchor: "navi")
-  #=> "/articles/first_day#navi"
-```
-
-### schema
-specify schema and generate URL.
-```ruby
-ArticleUrl.show_url(article, schema: "https")
-  #=> "https://kaeruspoon.net/articles/first_day"
-```
-
-```schema``` DSL specifies default schema.
+### Resources that make up URL
+You can specify name of resource. The resource name will use as internal accessor name.
 ```ruby
 class ArticleUrl < Kuebiko::Base
-  schema :hoge
-  ...
+  resource :article
+  
+  def hoge
+    build article.title # article is the internal accessor
+  end
 end
-
-ArticleUrl.show_url(article) #=> "hoge://kaeruspoon.net/articles/first_day"
 ```
 
-### host
-specify host and generate URL.
+You can pass the resource object to the initializer or generator class methods.
 ```ruby
-ArticleUrl.show_url(article, host: "hoge.com")
-  #=> "http://hoge.com/articles/first_day"
+url = Article.new(article)
+Article.show_path(article)
 ```
+The internal accessor returns nil if you do not pass the resource object.
 
-```host``` DSL specifies default host.
+You can specify more than one resources.
 ```ruby
 class ArticleUrl < Kuebiko::Base
-  host "fuga.com"
-  ...
+  resource :article, :user
+end
+```
+The order in which you specify the resources will be the order of the objects to pass to the arguments.
+```ruby
+url = ArticleUrl.new(article, user)
+```
+
+The name ```options``` is reserved as internal accessor.
+
+### Components of URL
+You can specify default components.
+```ruby
+Kuebiko.default_components(
+  schema: :https,
+  host: "kaeruspoon.net", 
+  port: 443
+)
+```
+The default value of each components are following when you do not specify value.
+* schema ```:http```
+* host ```nil```
+* port ```80```
+
+You can specify several options.
+```ruby
+Kuebiko.default_components(
+  host: "kaeruspoon.net",
+  trailing_slash: true
+)
+```
+Generating the URL with trailing slash if ```trailing_slash``` is true.
+
+You can specify these components and options in Kuebiko::Base class.
+```ruby
+class ArticleUrl < Kuebiko::Base
+  schema :http
+  host "hoge.com"
+  port 3000
+  trailing_slash true
+```
+The value in Kuebiko::Base class overrides the value of Kuebiko.default_components.
+
+You can specify these components and options at the build method.
+```ruby
+class ArticleUrl < Kuebiko::Base
+  def show
+    build "articles", article.title, schema: :https, host: "fuga.com", port: 1234, trailing_slash: true
+  end
+end
+```
+The value of build method overrides the value of Kuebiko::Base class.
+
+### Make up the URL
+The ```build``` method plays the central role to make up URLs.
+The first part of arguments would become the path of URL. The each arguments would be joined by slash.
+```ruby
+class ArticleUrl < Kuebiko::Base
+  def show
+    build "articles", article.title
+  end
+end
+```
+```"articles"``` and ```article.title``` would be joined by slash. The result is "articles/first_day" (article.title is "first_day").
+The ```show_path``` method returns "/articles/first_day".
+
+The second part of argument is components and options (see avobe).
+There are following options in addition to ```trailing_slash```.
+
+```query``` is used to make up the query string.
+```ruby
+build "articles", article.title, query: {special_code: 123}
+ #=> "articles/first_day?special_code=123"
+```
+
+```anchor``` is used to add the anchor to the URL.
+```ruby
+build "articles", article.title, anchor: "top_navi"
+  #=> "articles/first_day#top_navi"
+```
+
+### options internal accessor
+There is ```options``` internal accessor.
+```ruby
+class ArticleUrl < Kuebiko::Base
+  resource :article
+  
+  def show
+    queries = options.select {|k,v| %i|code mode|.include?(k.to_sym) }
+    build "articles", article.title, query: queries
+  end
 end
 
-ArticleUrl.show_url(article) #=> "http://fuga.com/articles/first_day"
+params = {controller: :articles, action: :index, code: "A", hoge: "B"}
+url = Article.new(article, params)
+url.show_path #=> "/articles/first_day?code=A"
+Article.show_path(article, params) #=> "/articles/first_day?code=A"
 ```
-
-### port
-generate URL with port.
-```ruby
-ArticleUrl.show_url(article, port: 3000)
-  #=> "http://kaeruspoon.net:3000/articles/first_day"
-```
+The arguments after resources arguments become ```options```.
 
 ## Installation
 
