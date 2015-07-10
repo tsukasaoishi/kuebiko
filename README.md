@@ -7,9 +7,9 @@ Kuebiko generates URLs from ruby code.
 ![Kuebiko](https://github.com/tsukasaoishi/kuebiko/wiki/images/kuebiko.jpg)
 
 ## Usage
-URLs generator class inherits Kuebiko::Base.
+URLs generator class inherits Kuebiko::Url.
 ```ruby
-class ArticleUrl < Kuebiko::Base
+class ArticleUrl < Kuebiko::Url
   resource :article
   schema :http
   host "kaeruspoon.net"
@@ -39,7 +39,7 @@ Methods of suffix ```_url``` generate URL.
 ### Resources that make up URL
 You can specify name of resource. The resource name will use as internal accessor name.
 ```ruby
-class ArticleUrl < Kuebiko::Base
+class ArticleUrl < Kuebiko::Url
   resource :article
 
   def hoge
@@ -57,7 +57,7 @@ The internal accessor returns nil if you do not pass the resource object.
 
 You can specify more than one resources.
 ```ruby
-class ArticleUrl < Kuebiko::Base
+class ArticleUrl < Kuebiko::Url
   resource :article, :user
 end
 ```
@@ -91,31 +91,31 @@ Kuebiko.default_components(
 ```
 Generating the URL with trailing slash if ```trailing_slash``` is true.
 
-You can specify these components and options in Kuebiko::Base class.
+You can specify these components and options in Kuebiko::Url class.
 ```ruby
-class ArticleUrl < Kuebiko::Base
+class ArticleUrl < Kuebiko::Url
   schema :http
   host "hoge.com"
   port 3000
   trailing_slash true
 ```
-The value in Kuebiko::Base class overrides the value of Kuebiko.default_components.
+The value in Kuebiko::Url class overrides the value of Kuebiko.default_components.
 
 You can specify these components and options at the build method.
 ```ruby
-class ArticleUrl < Kuebiko::Base
+class ArticleUrl < Kuebiko::Url
   def show
     build "articles", article.title, schema: :https, host: "fuga.com", port: 1234, trailing_slash: true
   end
 end
 ```
-The value of build method overrides the value of Kuebiko::Base class.
+The value of build method overrides the value of Kuebiko::Url class.
 
 ### Make up the URL
 The ```build``` method plays the central role to make up URLs.
 The first part of arguments would become the path of URL. The each arguments would be joined by slash.
 ```ruby
-class ArticleUrl < Kuebiko::Base
+class ArticleUrl < Kuebiko::Url
   def show
     build "articles", article.title
   end
@@ -142,7 +142,7 @@ build "articles", article.title, anchor: "top_navi"
 ### options internal accessor
 There is ```options``` internal accessor.
 ```ruby
-class ArticleUrl < Kuebiko::Base
+class ArticleUrl < Kuebiko::Url
   resource :article
 
   def show
@@ -178,7 +178,7 @@ $ gem install kuebiko
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+After checking out the repo, run `bin/setup` to install dependencies. Then, run `bundle exec rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
