@@ -45,4 +45,35 @@ class ComponentsTest < Minitest::Test
     assert_equal _port, @klass.components.port
     assert @klass.components.trailing_slash
   end
+
+  test "use value of Kuebiko.default_components if you don't specify" do
+    _schema = :ccc
+    _host = "tsutsu.com"
+    _port = 1977
+    Kuebiko.default_components(schema: _schema, host: _host, port: _port, trailing_slash: true)
+
+    assert_equal _schema, @klass.class_eval{ schema_value }
+    assert_equal _host, @klass.class_eval{ host_value }
+    assert_equal _port, @klass.class_eval{ port_value }
+    assert @klass.class_eval{ trailing_slash_value }
+  end
+
+  test "override value of Kuebiko.default_components if you specify" do
+    _schema = :ddd
+    _host = "tsutsutsu.com"
+    _port = 1976
+    Kuebiko.default_components(schema: :eee, host: "hoge.com", port: 1975, trailing_slash: true)
+
+    @klass.class_eval do
+      schema _schema
+      host _host
+      port _port
+      trailing_slash false
+    end
+
+    assert_equal _schema, @klass.class_eval{ schema_value }
+    assert_equal _host, @klass.class_eval{ host_value }
+    assert_equal _port, @klass.class_eval{ port_value }
+    refute @klass.class_eval{ trailing_slash_value }
+  end
 end
