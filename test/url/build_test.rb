@@ -77,5 +77,7 @@ class BuildTest < Minitest::Test
 
     assert_equal "#{argument}?tsu=1", build(argument, query: query)
     assert_equal "?tsu=1##{anchor}", build(query: query, anchor: anchor)
+    assert_equal "#{argument}##{anchor}", build(argument, anchor: anchor)
+    assert_equal "#{argument}?tsu=1##{anchor}", build(argument, query: query, anchor: anchor)
   end
 end
