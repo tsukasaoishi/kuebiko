@@ -40,6 +40,11 @@ class BuildTest < Minitest::Test
     assert_equal correct_val, build(*arguments)
   end
 
+  test "arguments are escaped" do
+    arguments = ["a/b:c d&e=f", "g<h>i"]
+    assert_equal "a%2Fb%3Ac+d%26e%3Df/g%3Ch%3Ei", build(*arguments)
+  end
+
   test "query options adds as query parameter" do
     query = {one: rand(100), "two" => SecureRandom.hex(10), 3 => SecureRandom.hex(10).to_sym}
     correct_val = query.sort_by{|k,v| k.to_s}.each_with_object(""){|(k,v), val| val << "#{k}=#{v}&"}[0..-2]

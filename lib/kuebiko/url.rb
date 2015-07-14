@@ -28,9 +28,9 @@ module Kuebiko
     private
 
     def build(*args, query: nil, anchor: nil)
-      path = args.join('/')
+      path = args.map{|a| CGI.escape(a.to_s)}.join('/')
       path << "?#{query.to_query}" if query.present?
-      path << "##{CGI.escape(anchor)}" if anchor.present?
+      path << "##{CGI.escape(anchor.to_s)}" if anchor.present?
       path
     end
 
