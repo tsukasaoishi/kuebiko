@@ -1,4 +1,7 @@
 require "kuebiko/components"
+require 'cgi'
+require "active_support/core_ext/object/to_query"
+require "active_support/core_ext/object/blank"
 
 module Kuebiko
   class Url
@@ -23,6 +26,13 @@ module Kuebiko
     end
 
     private
+
+    def build(*args, query: nil, anchor: nil)
+      path = args.join('/')
+      path << "?#{query.to_query}" if query.present?
+      path << "##{CGI.escape(anchor)}" if anchor.present?
+      path
+    end
 
     def options
       @_options
