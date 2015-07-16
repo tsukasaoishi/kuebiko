@@ -1,12 +1,10 @@
-require "kuebiko/components"
 require 'cgi'
 require "active_support/core_ext/object/to_query"
 require "active_support/core_ext/object/blank"
+require "kuebiko/url/components"
 
 module Kuebiko
   class Url
-    extend Components::ForUrl
-
     class << self
       def resource(*names)
         class_eval <<-DEF_INIT, __FILE__, __LINE__ + 1
@@ -29,7 +27,7 @@ module Kuebiko
 
     def build(*args, query: nil, anchor: nil, trailing_slash: false)
       path = args.map{|a| CGI.escape(a.to_s)}.join('/')
-      path << "/" if path.present? && (trailing_slash || self.class.trailing_slash_value)
+      path << "/" if path.present? && (trailing_slash || my_trailing_slash)
       path << "?#{query.to_query}" if query.present?
       path << "##{CGI.escape(anchor.to_s)}" if anchor.present?
       path

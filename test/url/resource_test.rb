@@ -1,6 +1,5 @@
 require 'test_helper'
 
-
 class ResourceTest < Minitest::Test
   Article = Struct.new(:title)
   User = Struct.new(:name)

@@ -2,62 +2,43 @@ require 'test_helper'
 
 class DefaultComponentTest < Minitest::Test
   def teardown
-    Kuebiko::Components.class_eval do
-      @components = nil
-    end
+    Kuebiko::Url.class_eval "@@components = {}"
+  end
+
+  def my(config)
+    Kuebiko::Url.new.instance_eval "my_#{config}"
   end
 
   test "raise exception if unknown key is specified" do
     assert_raises(ArgumentError) {
-      Kuebiko::Components.default_components(hoge: true)
+      Kuebiko.default_components(hoge: true)
     }
   end
 
   test "can specify scheme" do
     scheme = :hoge
-    Kuebiko::Components.default_components(scheme: scheme)
-    assert_equal scheme, Kuebiko::Components.scheme
+    Kuebiko.default_components(scheme: scheme)
+    assert_equal scheme, my(:scheme)
   end
 
   test "can specify host" do
     host = "kaeruspoon.net"
-    Kuebiko::Components.default_components(host: host)
-    assert_equal host, Kuebiko::Components.host
+    Kuebiko.default_components(host: host)
+    assert_equal host, my(:host)
   end
 
   test "can specify port" do
     port = 443
-    Kuebiko::Components.default_components(port: port)
-    assert_equal port, Kuebiko::Components.port
+    Kuebiko.default_components(port: port)
+    assert_equal port, my(:port)
   end
 
   test "can specify trailing_slash" do
-    Kuebiko::Components.default_components(trailing_slash: true)
-    assert Kuebiko::Components.trailing_slash
+    Kuebiko.default_components(trailing_slash: true)
+    assert my(:trailing_slash)
   end
 
   test "can specify more than one value" do
-    scheme = :ftp
-    host = "tsukasa.net"
-    port = 3000
-    Kuebiko::Components.default_components(
-      scheme: scheme, port: port, trailing_slash: true, host: host
-    )
-
-    assert_equal scheme, Kuebiko::Components.scheme
-    assert_equal host, Kuebiko::Components.host
-    assert_equal port, Kuebiko::Components.port
-    assert Kuebiko::Components.trailing_slash
-  end
-
-  test "check default values" do
-    assert_equal :http, Kuebiko::Components.scheme
-    assert_nil Kuebiko::Components.host
-    assert_equal 80, Kuebiko::Components.port
-    refute Kuebiko::Components.trailing_slash
-  end
-
-  test "can use Kuebiko.default_components" do
     scheme = :ftp
     host = "tsukasa.net"
     port = 3000
@@ -65,9 +46,16 @@ class DefaultComponentTest < Minitest::Test
       scheme: scheme, port: port, trailing_slash: true, host: host
     )
 
-    assert_equal scheme, Kuebiko::Components.scheme
-    assert_equal host, Kuebiko::Components.host
-    assert_equal port, Kuebiko::Components.port
-    assert Kuebiko::Components.trailing_slash
+    assert_equal scheme, my(:scheme)
+    assert_equal host, my(:host)
+    assert_equal port, my(:port)
+    assert my(:trailing_slash)
+  end
+
+  test "check default values" do
+    assert_equal :http, my(:scheme)
+    assert_nil my(:host)
+    assert_equal 80, my(:port)
+    refute my(:trailing_slash)
   end
 end

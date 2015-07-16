@@ -6,32 +6,34 @@ class ComponentsTest < Minitest::Test
   end
 
   def teardown
-    Kuebiko::Components.class_eval do
-      @components = nil
-    end
+    Kuebiko::Url.class_eval "@@components = {}"
+  end
+
+  def my(config)
+    @klass.new.instance_eval "my_#{config}"
   end
 
   test "can specify scheme" do
     _scheme = :aaa
     @klass.class_eval { scheme _scheme }
-    assert_equal _scheme, @klass.components.scheme
+    assert_equal _scheme, my(:scheme)
   end
 
   test "can specify host" do
     _host = "kaeruspoon.net"
     @klass.class_eval { host _host }
-    assert_equal _host, @klass.components.host
+    assert_equal _host, my(:host)
   end
 
   test "can specify port" do
     _port = 1999
     @klass.class_eval { port _port }
-    assert_equal _port, @klass.components.port
+    assert_equal _port, my(:port)
   end
 
   test "can specify trailing_slash" do
     @klass.class_eval { trailing_slash true }
-    assert @klass.components.trailing_slash
+    assert my(:trailing_slash)
   end
 
   test "can specify more than one value" do
@@ -46,10 +48,10 @@ class ComponentsTest < Minitest::Test
       trailing_slash true
     end
 
-    assert_equal _scheme, @klass.components.scheme
-    assert_equal _host, @klass.components.host
-    assert_equal _port, @klass.components.port
-    assert @klass.components.trailing_slash
+    assert_equal _scheme, my(:scheme)
+    assert_equal _host, my(:host)
+    assert_equal _port, my(:port)
+    assert my(:trailing_slash)
   end
 
   test "use value of Kuebiko.default_components if you don't specify" do
@@ -58,10 +60,10 @@ class ComponentsTest < Minitest::Test
     _port = 1977
     Kuebiko.default_components(scheme: _scheme, host: _host, port: _port, trailing_slash: true)
 
-    assert_equal _scheme, @klass.class_eval{ scheme_value }
-    assert_equal _host, @klass.class_eval{ host_value }
-    assert_equal _port, @klass.class_eval{ port_value }
-    assert @klass.class_eval{ trailing_slash_value }
+    assert_equal _scheme, my(:scheme)
+    assert_equal _host, my(:host)
+    assert_equal _port, my(:port)
+    assert my(:trailing_slash)
   end
 
   test "override value of Kuebiko.default_components if you specify" do
@@ -77,9 +79,9 @@ class ComponentsTest < Minitest::Test
       trailing_slash false
     end
 
-    assert_equal _scheme, @klass.class_eval{ scheme_value }
-    assert_equal _host, @klass.class_eval{ host_value }
-    assert_equal _port, @klass.class_eval{ port_value }
-    refute @klass.class_eval{ trailing_slash_value }
+    assert_equal _scheme, my(:scheme)
+    assert_equal _host, my(:host)
+    assert_equal _port, my(:port)
+    refute my(:trailing_slash)
   end
 end
