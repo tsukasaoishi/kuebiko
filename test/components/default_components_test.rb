@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class DefaultComponentTest < Minitest::Test
-  def setup
+  def teardown
     Kuebiko::Components.class_eval do
       @components = nil
     end
@@ -13,10 +13,10 @@ class DefaultComponentTest < Minitest::Test
     }
   end
 
-  test "can specify schema" do
-    schema = :hoge
-    Kuebiko::Components.default_components(schema: schema)
-    assert_equal schema, Kuebiko::Components.schema
+  test "can specify scheme" do
+    scheme = :hoge
+    Kuebiko::Components.default_components(scheme: scheme)
+    assert_equal scheme, Kuebiko::Components.scheme
   end
 
   test "can specify host" do
@@ -37,35 +37,35 @@ class DefaultComponentTest < Minitest::Test
   end
 
   test "can specify more than one value" do
-    schema = :ftp
+    scheme = :ftp
     host = "tsukasa.net"
     port = 3000
     Kuebiko::Components.default_components(
-      schema: schema, port: port, trailing_slash: true, host: host
+      scheme: scheme, port: port, trailing_slash: true, host: host
     )
 
-    assert_equal schema, Kuebiko::Components.schema
+    assert_equal scheme, Kuebiko::Components.scheme
     assert_equal host, Kuebiko::Components.host
     assert_equal port, Kuebiko::Components.port
     assert Kuebiko::Components.trailing_slash
   end
 
   test "check default values" do
-    assert_equal :http, Kuebiko::Components.schema
+    assert_equal :http, Kuebiko::Components.scheme
     assert_nil Kuebiko::Components.host
     assert_equal 80, Kuebiko::Components.port
     refute Kuebiko::Components.trailing_slash
   end
 
   test "can use Kuebiko.default_components" do
-    schema = :ftp
+    scheme = :ftp
     host = "tsukasa.net"
     port = 3000
     Kuebiko.default_components(
-      schema: schema, port: port, trailing_slash: true, host: host
+      scheme: scheme, port: port, trailing_slash: true, host: host
     )
 
-    assert_equal schema, Kuebiko::Components.schema
+    assert_equal scheme, Kuebiko::Components.scheme
     assert_equal host, Kuebiko::Components.host
     assert_equal port, Kuebiko::Components.port
     assert Kuebiko::Components.trailing_slash

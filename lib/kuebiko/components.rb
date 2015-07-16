@@ -1,6 +1,6 @@
 require "kuebiko/components/constants"
 require "kuebiko/components/getter_methods"
-require "kuebiko/components/setter_methods"
+require "kuebiko/components/for_url"
 
 module Kuebiko
   class Components

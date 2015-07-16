@@ -2,8 +2,8 @@ require 'test_helper'
 
 class BuildTest < Minitest::Test
   def setup
-    klass = Class.new(Kuebiko::Url)
-    @url = klass.new
+    @klass = Class.new(Kuebiko::Url)
+    @url = @klass.new
   end
 
   def build(*args)
@@ -75,7 +75,20 @@ class BuildTest < Minitest::Test
     assert_equal '#a%3Abc+d', build(anchor: anchor)
   end
 
-  test "arguments and query and anchor" do
+  test "trailing_slash option" do
+    assert_equal "", build(trailing_slash: true)
+
+    argument = SecureRandom.hex(10)
+    assert_equal "#{argument}/", build(argument, trailing_slash: true)
+  end
+
+  test "trailing_slash option with class config" do
+    @klass.class_eval { trailing_slash true }
+    argument = SecureRandom.hex(10)
+    assert_equal "#{argument}/", build(argument)
+  end
+
+  test "arguments and query and anchor and trailing_slash" do
     argument = SecureRandom.hex(10)
     query = {tsu: 1}
     anchor = SecureRandom.hex(8)
@@ -84,5 +97,10 @@ class BuildTest < Minitest::Test
     assert_equal "?tsu=1##{anchor}", build(query: query, anchor: anchor)
     assert_equal "#{argument}##{anchor}", build(argument, anchor: anchor)
     assert_equal "#{argument}?tsu=1##{anchor}", build(argument, query: query, anchor: anchor)
+
+    assert_equal "#{argument}/?tsu=1", build(argument, query: query, trailing_slash: true)
+    assert_equal "?tsu=1##{anchor}", build(query: query, anchor: anchor, trailing_slash: true)
+    assert_equal "#{argument}/##{anchor}", build(argument, anchor: anchor, trailing_slash: true)
+    assert_equal "#{argument}/?tsu=1##{anchor}", build(argument, query: query, anchor: anchor, trailing_slash: true)
   end
 end

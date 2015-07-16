@@ -11,7 +11,7 @@ URLs generator class inherits Kuebiko::Url.
 ```ruby
 class ArticleUrl < Kuebiko::Url
   resource :article
-  schema :http
+  scheme :http
   host "kaeruspoon.net"
 
   def show
@@ -72,13 +72,13 @@ The name ```options``` is reserved as internal accessor.
 You can specify default components.
 ```ruby
 Kuebiko.default_components(
-  schema: :https,
+  scheme: :https,
   host: "kaeruspoon.net", 
   port: 443
 )
 ```
 The default value of each components are following when you do not specify value.
-* schema ```:http```
+* scheme ```:http```
 * host ```nil```
 * port ```80```
 
@@ -94,7 +94,7 @@ Generating the URL with trailing slash if ```trailing_slash``` is true.
 You can specify these components and options in Kuebiko::Url class.
 ```ruby
 class ArticleUrl < Kuebiko::Url
-  schema :http
+  scheme :http
   host "hoge.com"
   port 3000
   trailing_slash true
@@ -105,7 +105,7 @@ You can specify these components and options at the build method.
 ```ruby
 class ArticleUrl < Kuebiko::Url
   def show
-    build "articles", article.title, schema: :https, host: "fuga.com", port: 1234, trailing_slash: true
+    build "articles", article.title, scheme: :https, host: "fuga.com", port: 1234, trailing_slash: true
   end
 end
 ```
