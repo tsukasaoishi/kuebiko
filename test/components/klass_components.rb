@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ComponentsTest < Minitest::Test
+class KlassComponentsTest < Minitest::Test
   def setup
     @klass = Class.new(Kuebiko::Url)
   end
