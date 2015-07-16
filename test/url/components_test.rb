@@ -18,7 +18,7 @@ class ComponentsTest < Minitest::Test
   end
 
   test "can specify host" do
-    _host = "tsukasa.com"
+    _host = "kaeruspoon.net"
     @klass.class_eval { host _host }
     assert_equal _host, @klass.components.host
   end
@@ -36,7 +36,7 @@ class ComponentsTest < Minitest::Test
 
   test "can specify more than one value" do
     _scheme = :bbb
-    _host = "oishi.com"
+    _host = "a.kaeruspoon.net"
     _port = 2015
 
     @klass.class_eval do
@@ -54,7 +54,7 @@ class ComponentsTest < Minitest::Test
 
   test "use value of Kuebiko.default_components if you don't specify" do
     _scheme = :ccc
-    _host = "tsutsu.com"
+    _host = "b.kaeruspoon.net"
     _port = 1977
     Kuebiko.default_components(scheme: _scheme, host: _host, port: _port, trailing_slash: true)
 
@@ -66,9 +66,9 @@ class ComponentsTest < Minitest::Test
 
   test "override value of Kuebiko.default_components if you specify" do
     _scheme = :ddd
-    _host = "tsutsutsu.com"
+    _host = "c.kaeruspoon.net"
     _port = 1976
-    Kuebiko.default_components(scheme: :eee, host: "hoge.com", port: 1975, trailing_slash: true)
+    Kuebiko.default_components(scheme: :eee, host: "d.kaeruspoon.net", port: 1975, trailing_slash: true)
 
     @klass.class_eval do
       scheme _scheme

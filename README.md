@@ -95,7 +95,7 @@ You can specify these components and options in Kuebiko::Url class.
 ```ruby
 class ArticleUrl < Kuebiko::Url
   scheme :http
-  host "hoge.com"
+  host "kaeruspoon.net"
   port 3000
   trailing_slash true
 ```
@@ -105,7 +105,7 @@ You can specify these components and options at the build method.
 ```ruby
 class ArticleUrl < Kuebiko::Url
   def show
-    build "articles", article.title, scheme: :https, host: "fuga.com", port: 1234, trailing_slash: true
+    build "articles", article.title, scheme: :https, host: "a.kaeruspoon.net", port: 1234, trailing_slash: true
   end
 end
 ```
