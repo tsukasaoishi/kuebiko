@@ -10,16 +10,16 @@ class ResourceTest < Minitest::Test
 
   test "use as internal accessor" do
     title = "first_day"
-    @klass.class_eval { resource :article }
+    @klass.class_eval { material :article }
     inst = @klass.new(Article.new(title))
 
     assert_equal title, inst.instance_eval { article.title }
   end
 
-  test "can specify more than one resource" do
+  test "can specify more than one material" do
     title = "second_day"
     name = "tsuka"
-    @klass.class_eval { resource :article, :user }
+    @klass.class_eval { material :article, :user }
     inst = @klass.new(Article.new(title), User.new(name))
 
     assert_equal title, inst.instance_eval { article.title }
@@ -28,7 +28,7 @@ class ResourceTest < Minitest::Test
 
   test "internal accessor returns nil if you do not pass to initializer" do
     title = "third_day"
-    @klass.class_eval { resource :article, :user }
+    @klass.class_eval { material :article, :user }
     inst = @klass.new(Article.new(title))
 
     assert_equal title, inst.instance_eval { article.title }
@@ -44,7 +44,7 @@ class ResourceTest < Minitest::Test
     inst = @klass.new(tsu: time_num)
     assert_equal time_num, inst.instance_eval { options[:tsu] }
 
-    @klass.class_eval { resource :article, :user }
+    @klass.class_eval { material :article, :user }
     some_code = rand(100000)
     inst2 = @klass.new(oi: some_code)
     assert_equal some_code, inst2.instance_eval { options[:oi] }

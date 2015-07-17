@@ -1,10 +1,10 @@
 module Kuebiko
   class Url
     class << self
-      def resource(*names)
+      def material(*names)
         class_eval <<-DEF_INIT, __FILE__, __LINE__ + 1
-          def initialize(*resources, **options)
-            #{names.map{|n| "@_#{n}"}.join(", ")}, _dust = resources
+          def initialize(*materials, **options)
+            #{names.map{|n| "@_#{n}"}.join(", ")}, _dust = materials
             @_options = options
           end
 

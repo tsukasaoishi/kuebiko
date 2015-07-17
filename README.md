@@ -10,7 +10,7 @@ Kuebiko generates URLs from ruby code.
 URLs generator class inherits Kuebiko::Url.
 ```ruby
 class ArticleUrl < Kuebiko::Url
-  resource :article
+  material :article
   scheme :http
   host "kaeruspoon.net"
 
@@ -37,10 +37,10 @@ Methods of suffix ```_url``` generate URL.
 ```show``` instance method is called from ```show_path``` method (or ```show_url```).
 
 ### Resources that make up URL
-You can specify name of resource. The resource name will use as internal accessor name.
+You can specify name of material. The material name will use as internal accessor name.
 ```ruby
 class ArticleUrl < Kuebiko::Url
-  resource :article
+  material :article
 
   def hoge
     build article.title # article is the internal accessor
@@ -48,20 +48,20 @@ class ArticleUrl < Kuebiko::Url
 end
 ```
 
-You can pass the resource object to the initializer or generator class methods.
+You can pass the material object to the initializer or generator class methods.
 ```ruby
 url = Article.new(article)
 Article.show_path(article)
 ```
-The internal accessor returns nil if you do not pass the resource object.
+The internal accessor returns nil if you do not pass the material object.
 
-You can specify more than one resources.
+You can specify more than one materials.
 ```ruby
 class ArticleUrl < Kuebiko::Url
-  resource :article, :user
+  material :article, :user
 end
 ```
-The order in which you specify the resources will be the order of the objects to pass to the arguments.
+The order in which you specify the materials will be the order of the objects to pass to the arguments.
 ```ruby
 url = ArticleUrl.new(article, user)
 ```
@@ -143,7 +143,7 @@ build "articles", article.title, anchor: "top_navi"
 There is ```options``` internal accessor.
 ```ruby
 class ArticleUrl < Kuebiko::Url
-  resource :article
+  material :article
 
   def show
     queries = options.select {|k,v| %i|code mode|.include?(k.to_sym) }
@@ -156,7 +156,7 @@ url = Article.new(article, params)
 url.show_path #=> "/articles/first_day?code=A"
 Article.show_path(article, params) #=> "/articles/first_day?code=A"
 ```
-The arguments after resources arguments become ```options```.
+The arguments after materials arguments become ```options```.
 
 ## Installation
 

@@ -2,7 +2,7 @@ require 'cgi'
 require "active_support/core_ext/object/to_query"
 require "active_support/core_ext/object/blank"
 require "kuebiko/url/components"
-require "kuebiko/url/resource"
+require "kuebiko/url/material"
 
 module Kuebiko
   class Url
