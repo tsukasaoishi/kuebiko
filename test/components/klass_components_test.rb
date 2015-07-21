@@ -16,23 +16,39 @@ class KlassComponentsTest < Minitest::Test
 
   test "can specify scheme" do
     _scheme = :aaa
+    @url = @klass.new(scheme: _scheme)
+    assert_equal _scheme, my(:scheme)
+    @url = nil
+
     @klass.class_eval { scheme _scheme }
     assert_equal _scheme, my(:scheme)
   end
 
   test "can specify host" do
     _host = "kaeruspoon.net"
+    @url = @klass.new(host: _host)
+    assert_equal _host, my(:host)
+    @url = nil
+
     @klass.class_eval { host _host }
     assert_equal _host, my(:host)
   end
 
   test "can specify port" do
     _port = 1999
+    @url = @klass.new(port: _port)
+    assert_equal _port, my(:port)
+    @url = nil
+
     @klass.class_eval { port _port }
     assert_equal _port, my(:port)
   end
 
   test "can specify trailing_slash" do
+    @url = @klass.new(trailing_slash: true)
+    assert my(:trailing_slash)
+    @url = nil
+
     @klass.class_eval { trailing_slash true }
     assert my(:trailing_slash)
   end
@@ -41,6 +57,18 @@ class KlassComponentsTest < Minitest::Test
     _scheme = :bbb
     _host = "a.kaeruspoon.net"
     _port = 2015
+
+    @url = @klass.new(
+      scheme: _scheme,
+      host: _host,
+      port: _port,
+      trailing_slash: true
+    )
+    assert_equal _scheme, my(:scheme)
+    assert_equal _host, my(:host)
+    assert_equal _port, my(:port)
+    assert my(:trailing_slash)
+    @url = nil
 
     @klass.class_eval do
       scheme _scheme
@@ -73,6 +101,18 @@ class KlassComponentsTest < Minitest::Test
     _port = 1976
     Kuebiko.default_components(scheme: :eee, host: "d.kaeruspoon.net", port: 1975, trailing_slash: true)
 
+    @url = @klass.new(
+      scheme: _scheme,
+      host: _host,
+      port: _port,
+      trailing_slash: false
+    )
+    assert_equal _scheme, my(:scheme)
+    assert_equal _host, my(:host)
+    assert_equal _port, my(:port)
+    refute my(:trailing_slash)
+
+    @url = nil
     @klass.class_eval do
       scheme _scheme
       host _host

@@ -26,6 +26,8 @@ module Kuebiko
         end
 
         def my_#{config}(klass = self.class)
+          return options[:#{config}] if options.key?(:#{config})
+
           my_components = (@@components[klass] ||= {})
           if my_components.key?(:#{config})
             my_components[:#{config}]
