@@ -55,7 +55,7 @@ class DefaultComponentTest < Minitest::Test
   test "check default values" do
     assert_equal :http, my(:scheme)
     assert_nil my(:host)
-    assert_equal 80, my(:port)
+    assert_nil my(:port)
     refute my(:trailing_slash)
   end
 end

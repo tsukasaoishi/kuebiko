@@ -1,6 +1,6 @@
 module Kuebiko
   class Url
-    DEFAULT = {scheme: :http, port: 80}
+    DEFAULT = {scheme: :http}
     COMPONENTS = %i|scheme host port trailing_slash|
     private_constant :DEFAULT, :COMPONENTS
 

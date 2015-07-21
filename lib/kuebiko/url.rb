@@ -24,8 +24,9 @@ module Kuebiko
         end
 
         def #{name}_url(options = {})
-          now_scheme = options[:scheme] || my_scheme
-          now_scheme.to_s + "://" + my_host.to_s + "/" + #{name}.build
+          url = my_scheme.to_s + "://" + my_host.to_s
+          url << (":" + my_port.to_s) if my_port
+          url + "/" + #{name}.build
         end
       DEF_URL_METHOD
     end

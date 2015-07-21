@@ -80,7 +80,7 @@ Kuebiko.default_components(
 The default value of each components are following when you do not specify value.
 * scheme ```:http```
 * host ```nil```
-* port ```80```
+* port ```nil```
 
 You can specify several options.
 ```ruby
