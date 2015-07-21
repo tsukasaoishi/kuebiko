@@ -17,7 +17,7 @@ module Kuebiko
     end
 
     def build
-      path = @paths.map{|a| CGI.escape(a.to_s)}.join('/')
+      path = @paths.select{|item| item.present?}.map{|item| CGI.escape(item.to_s)}.join('/')
       path << "/" if path.present? && @trailing_slash
       path << "?#{@query.to_query}" if @query.present?
       path << "##{CGI.escape(@anchor.to_s)}" if @anchor.present?

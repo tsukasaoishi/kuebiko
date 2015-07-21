@@ -28,8 +28,10 @@ class PreparationBuildTest < Minitest::Test
     arguments = []
     rand(100).times{ arguments << SecureRandom.hex(10) }
     rand(100).times{ arguments.insert(rand(arguments.size), SecureRandom.hex(10).to_sym) }
+    arguments << ""
+    arguments << nil
     rand(100).times{ arguments.insert(rand(arguments.size), rand(100000)) }
-    correct_val = arguments.each_with_object(""){|a, v| v << "#{a}/"}[0..-2]
+    correct_val = arguments.each_with_object(""){|a, v| v << "#{a}/" if a.present? }[0..-2]
     assert_equal correct_val, build(*arguments)
   end
 

@@ -4,8 +4,31 @@ require "kuebiko/preparation"
 
 module Kuebiko
   class Url
-    #def self.method_added(name)
-    #end
+    def self.method_added(name)
+      return unless public_method_defined?(name)
+      return if /_(path|url)\z/ === name
+
+      class_eval <<-DEF_URL_METHOD, __FILE__, __LINE__ + 1
+        class << self
+          def #{name}_path(*args, **options)
+            new(*args, **options).#{name}_path
+          end
+
+          def #{name}_url(*args, **options)
+            new(*args, **options).#{name}_url
+          end
+        end
+
+        def #{name}_path(options = {})
+          "/" + #{name}.build
+        end
+
+        def #{name}_url(options = {})
+          now_scheme = options[:scheme] || my_scheme
+          now_scheme.to_s + "://" + my_host.to_s + "/" + #{name}.build
+        end
+      DEF_URL_METHOD
+    end
 
     def initialize(*_, **options)
       @_options = options
