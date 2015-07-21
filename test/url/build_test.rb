@@ -8,7 +8,7 @@ class BuildTest < Minitest::Test
 
   def build(*args)
     @url.instance_eval do
-      build(*args)
+      build(*args).build
     end
   end
 
