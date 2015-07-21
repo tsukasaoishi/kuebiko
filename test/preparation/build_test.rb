@@ -1,15 +1,8 @@
 require 'test_helper'
 
-class BuildTest < Minitest::Test
-  def setup
-    @klass = Class.new(Kuebiko::Url)
-    @url = @klass.new
-  end
-
-  def build(*args)
-    @url.instance_eval do
-      build(*args).build
-    end
+class PreparationBuildTest < Minitest::Test
+  def build(*paths, **options)
+    Kuebiko::Preparation.new(paths, options).build
   end
 
   test "no arguments returns empty string" do
@@ -80,12 +73,6 @@ class BuildTest < Minitest::Test
 
     argument = SecureRandom.hex(10)
     assert_equal "#{argument}/", build(argument, trailing_slash: true)
-  end
-
-  test "trailing_slash option with class config" do
-    @klass.class_eval { trailing_slash true }
-    argument = SecureRandom.hex(10)
-    assert_equal "#{argument}/", build(argument)
   end
 
   test "arguments and query and anchor and trailing_slash" do
