@@ -10,7 +10,8 @@ class KlassComponentsTest < Minitest::Test
   end
 
   def my(config)
-    @klass.new.instance_eval "my_#{config}"
+    @url ||= @klass.new
+    @url.instance_eval "my_#{config}"
   end
 
   test "can specify scheme" do
