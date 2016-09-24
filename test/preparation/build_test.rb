@@ -19,7 +19,7 @@ class PreparationBuildTest < Minitest::Test
     assert_equal argument, build(argument.to_sym)
   end
 
-  test "Fixnum object returns value that be converted to String" do
+  test "Integer object returns value that be converted to String" do
     argument = rand(100000)
     assert_equal argument.to_s, build(argument)
   end
